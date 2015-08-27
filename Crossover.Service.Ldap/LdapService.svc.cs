@@ -6,13 +6,43 @@
 //-----------------------------------------------------------------------
 namespace Crossover.Service.Ldap
 {
+    using Crossover.Util.Ldap;
     using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Service implementation for single-sign on authentication and authorization.
     /// </summary>
     public class LdapService : ILdapService
     {
+        /// <summary>
+        /// Holds the static collection of authenticated users along with their group information.
+        /// </summary>
+        private static readonly IDictionary<string, UserInfo> authenticatedUsers;
+        
+        /// <summary>
+        /// Holds the utility for querying the LDAP directory
+        /// </summary>
+        private readonly ILdapQuery ldapQuery;
+
+        /// <summary>
+        /// Initializes a static member variables of the <see cref="LdapService"/> class.
+        /// </summary>
+        static LdapService()
+        {
+            authenticatedUsers = new ConcurrentDictionary<string, UserInfo>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LdapService"/> class with the required dependency.
+        /// </summary>
+        /// <param name="ldapQuery">Utility for querying the LDAP directory.</param>
+        public LdapService(ILdapQuery ldapQuery)
+        {
+            this.ldapQuery = ldapQuery;
+        }
+
         /// <summary>
         /// Validate the password hash for user and authenticate him.
         /// </summary>
