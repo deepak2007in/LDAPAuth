@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Crossover.Service.Ldap.Service1" CodeBehind="LdapService.svc.cs" %>
