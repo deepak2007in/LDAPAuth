@@ -1,3 +1,9 @@
+//-----------------------------------------------------------------------
+// <copyright file="CustomAuthentication.cs" company="Crossover">
+// This class has the responsibility of providing utility methods to the calling web application.
+// </copyright>
+// <author>Deepak Agnihotri</author>
+//-----------------------------------------------------------------------
 namespace Crossover.Web.Security
 {
     using System;
