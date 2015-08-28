@@ -38,9 +38,10 @@ namespace Crossover.Service.Ldap
         /// Initializes a new instance of the <see cref="LdapService"/> class with the required dependency.
         /// </summary>
         /// <param name="ldapQuery">Utility for querying the LDAP directory.</param>
-        public LdapService(ILdapQuery ldapQuery)
+        public LdapService()
         {
-            this.ldapQuery = ldapQuery;
+            // TODO: Implement DI
+            this.ldapQuery = new LdapQuery();
         }
 
         /// <summary>

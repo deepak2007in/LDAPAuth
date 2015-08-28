@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="ba15e54b-26a1-4174-90ce-0f7fc47dcf16" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:6441/LdapService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="LdapService.disco" MetadataType="Disco" ID="40a8af9c-c2b9-4a2d-add0-d2f448eea084" SourceId="1" SourceUrl="http://localhost:6441/LdapService.svc?disco" />
+    <MetadataFile FileName="LdapService.xsd" MetadataType="Schema" ID="aaa133d0-a3f8-4a84-8faf-7de75d6f7aed" SourceId="1" SourceUrl="http://localhost:6441/LdapService.svc?xsd=xsd2" />
+    <MetadataFile FileName="LdapService1.xsd" MetadataType="Schema" ID="c2c090b1-3410-4515-8168-a3ebb6285213" SourceId="1" SourceUrl="http://localhost:6441/LdapService.svc?xsd=xsd3" />
+    <MetadataFile FileName="LdapService2.xsd" MetadataType="Schema" ID="54dec295-4135-473e-a19f-9f55c74a6ca3" SourceId="1" SourceUrl="http://localhost:6441/LdapService.svc?xsd=xsd0" />
+    <MetadataFile FileName="LdapService3.xsd" MetadataType="Schema" ID="9423debb-0ccf-4642-9845-1fe247d83be3" SourceId="1" SourceUrl="http://localhost:6441/LdapService.svc?xsd=xsd1" />
+    <MetadataFile FileName="LdapService.wsdl" MetadataType="Wsdl" ID="93ae2dc6-0e25-49d1-95d9-7adb244a74a0" SourceId="1" SourceUrl="http://localhost:6441/LdapService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -12,6 +12,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Util.Ldap", "Crossover.Util.Ldap\Crossover.Util.Ldap.csproj", "{EB03365F-295D-4A8C-806E-953243E64601}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Web.Security", "Crossover.Web.Security\Crossover.Web.Security.csproj", "{7719AAF8-98DB-4DD5-A829-859DAF6356A9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E4B54AB3-1BE4-47B9-8309-842F0DC92547} = {E4B54AB3-1BE4-47B9-8309-842F0DC92547}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
