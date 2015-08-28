@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Service.Ldap", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Util.Ldap", "Crossover.Util.Ldap\Crossover.Util.Ldap.csproj", "{EB03365F-295D-4A8C-806E-953243E64601}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Web.Security", "Crossover.Web.Security\Crossover.Web.Security.csproj", "{7719AAF8-98DB-4DD5-A829-859DAF6356A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{EB03365F-295D-4A8C-806E-953243E64601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB03365F-295D-4A8C-806E-953243E64601}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB03365F-295D-4A8C-806E-953243E64601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7719AAF8-98DB-4DD5-A829-859DAF6356A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7719AAF8-98DB-4DD5-A829-859DAF6356A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7719AAF8-98DB-4DD5-A829-859DAF6356A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7719AAF8-98DB-4DD5-A829-859DAF6356A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
