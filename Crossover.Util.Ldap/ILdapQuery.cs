@@ -27,5 +27,13 @@ namespace Crossover.Util.Ldap
         /// <param name="commonName">The Common Name (CN).</param>
         /// <returns>Collection of user groups associated with user.</returns>
         IList<string> GetGroups(string commonName);
+
+        /// <summary>
+        /// Registers the new user into the LDAP directory.
+        /// </summary>
+        /// <param name="userToken">The lookup key.</param>
+        /// <param name="passwordHash">The password hash.</param>
+        /// <returns>Flag indicating the success of the result.</returns>
+        bool RegisterUser(string userToken, string passwordHash);
     }
 }

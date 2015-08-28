@@ -7,6 +7,8 @@
 namespace Crossover.Util.Ldap
 {
     using System;
+    using System.Linq;
+    using System.DirectoryServices;
     using System.Collections.Generic;
 
     /// <summary>
@@ -22,7 +24,13 @@ namespace Crossover.Util.Ldap
         /// <returns>The Common Name (CN) string.</returns>
         public string GetCommonName(string userToken)
         {
-            throw new NotImplementedException();
+            var path = "LDAP://DC=Softwaremaker,DC=net";
+            var directoryEntry = new DirectoryEntry(path: path);
+            var rootSearch = new DirectorySearcher(directoryEntry);
+            rootSearch.Filter = "(&(objectCategory=user)(userPrincipalName=" + userToken +"))";
+            var searchResults = rootSearch.FindAll() as IEnumerable<SearchResult>;
+            var commonName = searchResults.Select(searchResult => searchResult.Properties["cn"]).FirstOrDefault();
+            return commonName.ToString();
         }
 
         /// <summary>
@@ -31,6 +39,21 @@ namespace Crossover.Util.Ldap
         /// <param name="commonName">The Common Name (CN).</param>
         /// <returns>Collection of user groups associated with user.</returns>
         public IList<string> GetGroups(string commonName)
+        {
+            var path = string.Concat("LDAP://server/CN=", commonName, ",CN=Users,DC=Softwaremaker,DC=net");
+            var user = new DirectoryEntry(path: path);
+            var properties = user.Properties as IEnumerable<PropertyValueCollection>;
+            var userGroups = properties.Where(property => property.PropertyName == "memberOf").Select(property => property.Value.ToString());
+            return userGroups.ToList();
+        }
+
+        /// <summary>
+        /// Registers the new user into the LDAP directory.
+        /// </summary>
+        /// <param name="userToken">The lookup key.</param>
+        /// <param name="passwordHash">The password hash.</param>
+        /// <returns>Flag indicating the success of the result.</returns>
+        public bool RegisterUser(string userToken, string passwordHash)
         {
             throw new NotImplementedException();
         }
