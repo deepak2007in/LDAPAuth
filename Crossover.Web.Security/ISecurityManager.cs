@@ -1,10 +1,12 @@
-﻿// <copyright file="ISecurityManager.cs" company="Crossover">
+﻿//-----------------------------------------------------------------------
+// <copyright file="ISecurityManager.cs" company="Crossover">
 // This contract has the responsibility of providing the security objects related to the claimed identity.
 // </copyright>
 // <author>Deepak Agnihotri</author>
 //-----------------------------------------------------------------------
 namespace Crossover.Web.Security
 {
+    using System.Collections;
     using System.Security.Principal;
 
     /// <summary>
@@ -13,11 +15,18 @@ namespace Crossover.Web.Security
     public interface ISecurityManager
     {
         /// <summary>
-        /// Gets the user principal associated with the logged in user.
+        /// Gets the user identity associated with the logged in user.
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
-        /// <returns>The security principal.</returns>
-        IPrincipal GetUserPrincipal(string email);
+        /// <returns>The user identity.</returns>
+        IIdentity GetUserIdentity(string email);
+
+        /// <summary>
+        /// Gets the roles associated with the logged in user.
+        /// </summary>
+        /// <param name="email">The unique identifier of the user.</param>
+        /// <returns>The collection of role.</returns>
+        ArrayList GetUserRoles(string email);
 
         /// <summary>
         /// Validates the provided e-mail and password.
