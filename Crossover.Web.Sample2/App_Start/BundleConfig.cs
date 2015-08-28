@@ -1,11 +1,23 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="BundleConfig.cs" company="Crossover">
+// This class has the responsibility of bundling the application resources.
+// </copyright>
+// <author>Deepak Agnihotri</author>
+//-----------------------------------------------------------------------
 namespace Crossover.Web.Sample2
 {
+    // TODO: Get it from Nuget
+    using System.Web.Optimization;
+
+    /// <summary>
+    /// Creates the bundles of static resources of the application.
+    /// </summary>
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+        /// <summary>
+        /// Registers the application bundles.
+        /// </summary>
+        /// <param name="bundles">Static resource bundles.</param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -14,8 +26,6 @@ namespace Crossover.Web.Sample2
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 

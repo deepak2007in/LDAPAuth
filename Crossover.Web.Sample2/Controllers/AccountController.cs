@@ -1,33 +1,53 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="AccountController.cs" company="Crossover">
-// This controller has the responsibility of providing the security objects related to the claimed identity.
+// This controller has the responsibility loading the login and registration view.
 // </copyright>
 // <author>Deepak Agnihotri</author>
 //-----------------------------------------------------------------------
 namespace Crossover.Web.Sample2.Controllers
 {
     using System.Web.Mvc;
+    using System.Web.Security;
     using Models;
     using Security;
-    using System.Web.Security;
 
+    /// <summary>
+    /// Loads the login and registration view.
+    /// </summary>
     public class AccountController : Controller
     {
+        /// <summary>
+        /// Holds the service utility for performing the authentication with the LDAP WCF service.
+        /// </summary>
         private readonly ISecurityManager securityManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountController"/> class with the required dependency.
+        /// </summary>
         public AccountController()
         {
+            // TODO: Implement DI
             this.securityManager = new SecurityManager();
         }
 
-        //
-        // GET: /Account/Login
+        /// <summary>
+        /// Renders the login view with the URL to redirect after login.
+        /// </summary>
+        /// <param name="returnUrl">The URL to redirect.</param>
+        /// <returns>Loads the view.</returns>
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ViewResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
+        /// <summary>
+        /// Post the username and password for authentication.
+        /// </summary>
+        /// <param name="model">The username and password.</param>
+        /// <param name="returnUrl">The URL to redirect.</param>
+        /// <returns>Performs the authentication.</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -53,10 +73,12 @@ namespace Crossover.Web.Sample2.Controllers
             return new HttpUnauthorizedResult();
         }
 
-        //
-        // GET: /Account/Register
+        /// <summary>
+        /// Renders the registration view.
+        /// </summary>
+        /// <returns>The registration view.</returns>
         [AllowAnonymous]
-        public ActionResult Register()
+        public ViewResult Register()
         {
             return View();
         }
