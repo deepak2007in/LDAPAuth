@@ -7,6 +7,7 @@
 namespace Crossover.Web.Security
 {
     using System;
+    using System.Collections;
     using System.Security.Principal;
 
     /// <summary>
@@ -32,10 +33,11 @@ namespace Crossover.Web.Security
 		/// </summary>
 		/// <param name="email">Email of the User</param>
         /// <param name="roles">Roles associated with the user.</param>
-		public CustomIdentity(string email, string roles)
+		public CustomIdentity(string email, string roles, bool isAuthenticated)
 		{
 			this.UserEmail = email;
 			this.UserRoles = roles;
+            this.IsAuthenticated = isAuthenticated;
 		}
 
 		// Properties
@@ -77,5 +79,16 @@ namespace Crossover.Web.Security
 		/// The roles are stored in a pipe "|" separated string
 		/// </summary>
 		public string UserRoles { get; set; }
+
+        public ArrayList Roles
+        {
+            get
+            {
+                string[] roles = this.UserRoles.Split(new char[] { '|' });
+                ArrayList arrRoles = new ArrayList();
+                arrRoles.InsertRange(0, roles);
+                return arrRoles;
+            }
+        }
 	}
 }

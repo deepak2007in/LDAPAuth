@@ -9,6 +9,7 @@ namespace Crossover.Web.Sample2.Controllers
     using System.Web.Mvc;
     using Models;
     using Security;
+    using System.Web.Security;
 
     public class AccountController : Controller
     {
@@ -42,9 +43,10 @@ namespace Crossover.Web.Sample2.Controllers
                 var identity = securityManager.GetUserIdentity(email: model.Email);
                 if(identity != null && identity.IsAuthenticated)
                 {
-                    var roles = securityManager.GetUserRoles(email: model.Email);
-                    var principal = new CustomPrincipal(id: identity, rolesArray: roles);
+                    var principal = new CustomPrincipal(identity: identity, rolesArray: identity.Roles);
                     HttpContext.User = principal;
+                    var cookie = FormsAuthentication.GetAuthCookie(userName: model.Email, createPersistentCookie: false);
+                    Request.Cookies.Add(cookie: cookie);
                     return Redirect(returnUrl);
                 }
             }

@@ -20,22 +20,11 @@ namespace Crossover.Web.Security
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
         /// <returns>The user identity.</returns>
-        public IIdentity GetUserIdentity(string email)
+        public CustomIdentity GetUserIdentity(string email)
         {
-            throw new NotImplementedException();
+            return new CustomIdentity(email: email, roles: "Programmer|TechLead|Manager", isAuthenticated: true);
         }
-
-        /// <summary>
-        /// Gets the roles associated with the logged in user.
-        /// </summary>
-        /// <param name="email">The unique identifier of the user.</param>
-        /// <returns>The collection of role.</returns>
-        public ArrayList GetUserRoles(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        
         /// <summary>
         /// Validates the provided e-mail and password.
         /// </summary>
@@ -44,7 +33,7 @@ namespace Crossover.Web.Security
         /// <returns>True if authenticated successfully; false otherwise.</returns>
         public bool ValidateLogin(string email, string password)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

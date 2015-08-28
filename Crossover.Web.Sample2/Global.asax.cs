@@ -22,11 +22,10 @@ namespace Crossover.Web.Sample2
             var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
             if(authCookie != null)
             {
-                var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 var securityManager = new SecurityManager();
                 var identity = securityManager.GetUserIdentity(authCookie.Name);
-                var roles = securityManager.GetUserRoles(authCookie.Name);
-                var principal = new CustomPrincipal(id: identity, rolesArray: roles);
+                var roles = identity.Roles;
+                var principal = new CustomPrincipal(identity: identity, rolesArray: roles);
                 Context.User = principal;
             }
         }

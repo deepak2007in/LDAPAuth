@@ -19,15 +19,8 @@ namespace Crossover.Web.Security
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
         /// <returns>The user identity.</returns>
-        IIdentity GetUserIdentity(string email);
-
-        /// <summary>
-        /// Gets the roles associated with the logged in user.
-        /// </summary>
-        /// <param name="email">The unique identifier of the user.</param>
-        /// <returns>The collection of role.</returns>
-        ArrayList GetUserRoles(string email);
-
+        CustomIdentity GetUserIdentity(string email);
+        
         /// <summary>
         /// Validates the provided e-mail and password.
         /// </summary>

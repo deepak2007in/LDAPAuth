@@ -19,22 +19,22 @@ namespace Crossover.Web.Security
 		/// <summary>
         /// Holds the identity of the user.
         /// </summary>
-		private IIdentity identity;
+		private readonly IIdentity identity;
         /// <summary>
         /// Holds the collection of roles associated with user.
         /// </summary>
-		private ArrayList roles;
+		private readonly ArrayList roles;
         
 		/// <summary>
 		/// Initializes a new instance of the GenericPrincipal class 
 		/// from a CustomIdentity and an ArrayList of role names 
 		/// to which the user represented by that CustomIdentity belongs
 		/// </summary>
-		/// <param name="id">Identity of the user.</param>
+		/// <param name="identity">Identity of the user.</param>
 		/// <param name="rolesArray">Collection of roles associated with the user.</param>
-		public CustomPrincipal(IIdentity id, ArrayList rolesArray)
+		public CustomPrincipal(IIdentity identity, ArrayList rolesArray)
 		{
-			identity = id;
+			this.identity = identity;
 			roles = rolesArray;
 		}
 		
@@ -52,10 +52,6 @@ namespace Crossover.Web.Security
 		/// <summary>
 		/// Gets the CustomIdentity of the user represented by the current CustomPrincipal.
 		/// </summary>
-		public IIdentity Identity
-		{
-			get { return identity; }
-			set { identity = value; }
-		}
+		public IIdentity Identity { get; private set; }
 	}
 }

@@ -80,11 +80,8 @@ namespace Crossover.Web.Security
 					if(cookie != null)
 					{
 						string str = cookie.Value;
-						CustomIdentity userIdentity = CustomAuthentication.Decrypt(str);
-						string[] roles = userIdentity.UserRoles.Split(new char[]{'|'});
-						ArrayList arrRoles = new ArrayList();
-						arrRoles.InsertRange(0, roles);
-						CustomPrincipal principal = new CustomPrincipal(userIdentity, arrRoles);
+						var userIdentity = CustomAuthentication.Decrypt(str);
+						var principal = new CustomPrincipal(userIdentity, userIdentity.Roles);
 						app.Context.User = principal;
 						Thread.CurrentPrincipal = principal;
 					}
