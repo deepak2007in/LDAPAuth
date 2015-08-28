@@ -6,9 +6,12 @@
 //-----------------------------------------------------------------------
 namespace Crossover.Web.Security
 {
+    using global::Crossover.Web.Security.Crossover.Service.Ldap.Proxy;
     using System;
     using System.Collections;
     using System.Security.Principal;
+    using System.Threading.Tasks;
+
 
     /// <summary>
     /// Provides access to the security objects and validates the claimed identity.
@@ -16,13 +19,35 @@ namespace Crossover.Web.Security
     public class SecurityManager : ISecurityManager
     {
         /// <summary>
+        /// Holds the proxy for LDAP service component.
+        /// </summary>
+        private readonly ILdapService ldapServiceClient;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SecurityManager"/> class.
+        /// </summary>
+        public SecurityManager()
+        {
+            // TODO: Implement DI
+            ldapServiceClient = new LdapServiceClient();
+        }
+
+        /// <summary>
         /// Gets the user identity associated with the logged in user.
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
         /// <returns>The user identity.</returns>
-        public CustomIdentity GetUserIdentity(string email)
+        public async Task<CustomIdentity> GetUserIdentityAsync(string email)
         {
-            return new CustomIdentity(email: email, roles: "Programmer|TechLead|Manager", isAuthenticated: true);
+            var isAuthenticated = await this.ldapServiceClient.IsAuthenticatedAsync(email: email);
+            if(isAuthenticated)
+            {
+                var groups = await this.ldapServiceClient.GetUserInfoAsync(email: email);
+                var userRoles = string.Join("|", groups.UserGroups);
+                return new CustomIdentity(email: email, roles: userRoles, isAuthenticated: isAuthenticated);
+            }
+
+            return new CustomIdentity(email: email, roles: string.Empty, isAuthenticated: isAuthenticated);
         }
         
         /// <summary>
@@ -31,9 +56,10 @@ namespace Crossover.Web.Security
         /// <param name="email">The unique identifier of the user.</param>
         /// <param name="password">Password to validate against.</param>
         /// <returns>True if authenticated successfully; false otherwise.</returns>
-        public bool ValidateLogin(string email, string password)
+        public async Task<bool> ValidateLoginAsync(string email, string password)
         {
-            return true;
+            var userInfo = await this.ldapServiceClient.AuthenticateAsync(email: email, passwordHash: password);
+            return userInfo != null;
         }
     }
 }

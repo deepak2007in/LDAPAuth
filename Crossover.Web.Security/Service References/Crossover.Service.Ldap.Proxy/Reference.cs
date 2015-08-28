@@ -63,16 +63,16 @@ namespace Crossover.Web.Security.Crossover.Service.Ldap.Proxy {
     public interface ILdapService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/Authenticate", ReplyAction="http://tempuri.org/ILdapService/AuthenticateResponse")]
-        Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo Authenticate(string email, string passwordHash);
+        Crossover.Service.Ldap.Proxy.UserInfo Authenticate(string email, string passwordHash);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/Authenticate", ReplyAction="http://tempuri.org/ILdapService/AuthenticateResponse")]
-        System.Threading.Tasks.Task<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo> AuthenticateAsync(string email, string passwordHash);
+        System.Threading.Tasks.Task<Crossover.Service.Ldap.Proxy.UserInfo> AuthenticateAsync(string email, string passwordHash);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/GetUserInfo", ReplyAction="http://tempuri.org/ILdapService/GetUserInfoResponse")]
-        Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo GetUserInfo(string email);
+        Crossover.Service.Ldap.Proxy.UserInfo GetUserInfo(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/GetUserInfo", ReplyAction="http://tempuri.org/ILdapService/GetUserInfoResponse")]
-        System.Threading.Tasks.Task<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo> GetUserInfoAsync(string email);
+        System.Threading.Tasks.Task<Crossover.Service.Ldap.Proxy.UserInfo> GetUserInfoAsync(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/IsAuthenticated", ReplyAction="http://tempuri.org/ILdapService/IsAuthenticatedResponse")]
         bool IsAuthenticated(string email);
@@ -81,19 +81,19 @@ namespace Crossover.Web.Security.Crossover.Service.Ldap.Proxy {
         System.Threading.Tasks.Task<bool> IsAuthenticatedAsync(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/Register", ReplyAction="http://tempuri.org/ILdapService/RegisterResponse")]
-        Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo Register(string email, string passwordHash);
+        Crossover.Service.Ldap.Proxy.UserInfo Register(string email, string passwordHash);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILdapService/Register", ReplyAction="http://tempuri.org/ILdapService/RegisterResponse")]
-        System.Threading.Tasks.Task<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo> RegisterAsync(string email, string passwordHash);
+        System.Threading.Tasks.Task<Crossover.Service.Ldap.Proxy.UserInfo> RegisterAsync(string email, string passwordHash);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface ILdapServiceChannel : Crossover.Web.Security.Crossover.Service.Ldap.Proxy.ILdapService, System.ServiceModel.IClientChannel {
+    public interface ILdapServiceChannel : Crossover.Service.Ldap.Proxy.ILdapService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class LdapServiceClient : System.ServiceModel.ClientBase<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.ILdapService>, Crossover.Web.Security.Crossover.Service.Ldap.Proxy.ILdapService {
+    public partial class LdapServiceClient : System.ServiceModel.ClientBase<Crossover.Service.Ldap.Proxy.ILdapService>, Crossover.Service.Ldap.Proxy.ILdapService {
         
         public LdapServiceClient() {
         }
@@ -114,19 +114,19 @@ namespace Crossover.Web.Security.Crossover.Service.Ldap.Proxy {
                 base(binding, remoteAddress) {
         }
         
-        public Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo Authenticate(string email, string passwordHash) {
+        public Crossover.Service.Ldap.Proxy.UserInfo Authenticate(string email, string passwordHash) {
             return base.Channel.Authenticate(email, passwordHash);
         }
         
-        public System.Threading.Tasks.Task<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo> AuthenticateAsync(string email, string passwordHash) {
+        public System.Threading.Tasks.Task<Crossover.Service.Ldap.Proxy.UserInfo> AuthenticateAsync(string email, string passwordHash) {
             return base.Channel.AuthenticateAsync(email, passwordHash);
         }
         
-        public Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo GetUserInfo(string email) {
+        public Crossover.Service.Ldap.Proxy.UserInfo GetUserInfo(string email) {
             return base.Channel.GetUserInfo(email);
         }
         
-        public System.Threading.Tasks.Task<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo> GetUserInfoAsync(string email) {
+        public System.Threading.Tasks.Task<Crossover.Service.Ldap.Proxy.UserInfo> GetUserInfoAsync(string email) {
             return base.Channel.GetUserInfoAsync(email);
         }
         
@@ -138,11 +138,11 @@ namespace Crossover.Web.Security.Crossover.Service.Ldap.Proxy {
             return base.Channel.IsAuthenticatedAsync(email);
         }
         
-        public Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo Register(string email, string passwordHash) {
+        public Crossover.Service.Ldap.Proxy.UserInfo Register(string email, string passwordHash) {
             return base.Channel.Register(email, passwordHash);
         }
         
-        public System.Threading.Tasks.Task<Crossover.Web.Security.Crossover.Service.Ldap.Proxy.UserInfo> RegisterAsync(string email, string passwordHash) {
+        public System.Threading.Tasks.Task<Crossover.Service.Ldap.Proxy.UserInfo> RegisterAsync(string email, string passwordHash) {
             return base.Channel.RegisterAsync(email, passwordHash);
         }
     }

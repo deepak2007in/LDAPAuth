@@ -6,8 +6,7 @@
 //-----------------------------------------------------------------------
 namespace Crossover.Web.Security
 {
-    using System.Collections;
-    using System.Security.Principal;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Contract for providing access to the security objects and validates the claimed identity.
@@ -19,14 +18,14 @@ namespace Crossover.Web.Security
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
         /// <returns>The user identity.</returns>
-        CustomIdentity GetUserIdentity(string email);
-        
+        Task<CustomIdentity> GetUserIdentityAsync(string email);
+
         /// <summary>
         /// Validates the provided e-mail and password.
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
         /// <param name="password">Password to validate against.</param>
         /// <returns>True if authenticated successfully; false otherwise.</returns>
-        bool ValidateLogin(string email, string password);
+        Task<bool> ValidateLoginAsync(string email, string password);
     }
 }

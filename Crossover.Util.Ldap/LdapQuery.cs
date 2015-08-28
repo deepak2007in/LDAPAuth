@@ -22,7 +22,7 @@ namespace Crossover.Util.Ldap
         /// <remarks>The CN is an unique identity and cannot be changed or edited in LDAP.</remarks>
         /// <param name="userToken">The lookup key.</param>
         /// <returns>The Common Name (CN) string.</returns>
-        public string GetCommonName(string userToken)
+        public string GetPasswordHash(string userToken)
         {
             var path = "LDAP://DC=Softwaremaker,DC=net";
             var directoryEntry = new DirectoryEntry(path: path);

@@ -6,10 +6,9 @@
 //-----------------------------------------------------------------------
 namespace Crossover.Service.Ldap
 {
-    using Crossover.Util.Ldap;
-    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using Util.Ldap;
 
     /// <summary>
     /// Service implementation for single-sign on authentication and authorization.
@@ -52,7 +51,24 @@ namespace Crossover.Service.Ldap
         /// <returns>The collection of user groups.</returns>
         public UserInfo Authenticate(string loginName, string passwordHash)
         {
-            throw new NotImplementedException();
+            if(!this.IsAuthenticated(loginName: loginName))
+            {
+                var passwordHashInLdap = this.ldapQuery.GetPasswordHash(userToken: loginName);
+                if (passwordHash == passwordHashInLdap)
+                {
+                    var groups = this.ldapQuery.GetGroups(commonName: loginName);
+                    var userInfo = new UserInfo { UserGroups = groups };
+                    return userInfo;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return this.GetUserInfo(loginName: loginName);
+            }
         }
 
         /// <summary>
@@ -62,7 +78,11 @@ namespace Crossover.Service.Ldap
         /// <returns>The collection of user groups.</returns>
         public UserInfo GetUserInfo(string loginName)
         {
-            throw new NotImplementedException();
+            if(this.IsAuthenticated(loginName: loginName))
+            {
+                return authenticatedUsers[key: loginName];
+            }
+            return null;
         }
 
         /// <summary>
@@ -72,7 +92,7 @@ namespace Crossover.Service.Ldap
         /// <returns>The collection of user groups.</returns>
         public bool IsAuthenticated(string loginName)
         {
-            throw new NotImplementedException();
+            return authenticatedUsers.ContainsKey(loginName);
         }
 
         /// <summary>
@@ -83,7 +103,8 @@ namespace Crossover.Service.Ldap
         /// <returns>The collection of user groups.</returns>
         public UserInfo Register(string loginName, string passwordHash)
         {
-            throw new NotImplementedException();
+            var registered = this.ldapQuery.RegisterUser(userToken: loginName, passwordHash: passwordHash);
+            return new UserInfo { UserGroups = new List<string>(new[] { "Guests" }) };
         }
     }
 }

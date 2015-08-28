@@ -91,7 +91,7 @@
   </wsdl:binding>
   <wsdl:service name="LdapService">
     <wsdl:port name="BasicHttpBinding_ILdapService" binding="tns:BasicHttpBinding_ILdapService">
-      <soap:address location="http://localhost:6441/LdapService.svc" />
+      <soap:address location="http://localhost:6441/LdapService.svc/LdapService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

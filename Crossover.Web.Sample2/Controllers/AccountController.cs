@@ -10,6 +10,8 @@ namespace Crossover.Web.Sample2.Controllers
     using System.Web.Security;
     using Models;
     using Security;
+    using System.Threading.Tasks;
+
 
     /// <summary>
     /// Loads the login and registration view.
@@ -51,16 +53,16 @@ namespace Crossover.Web.Sample2.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            if(securityManager.ValidateLogin(email: model.Email, password: model.Password))
+            if(await securityManager.ValidateLoginAsync(email: model.Email, password: model.Password))
             {
-                var identity = securityManager.GetUserIdentity(email: model.Email);
+                var identity = await securityManager.GetUserIdentityAsync(email: model.Email);
                 if(identity != null && identity.IsAuthenticated)
                 {
                     var principal = new CustomPrincipal(identity: identity, rolesArray: identity.Roles);
