@@ -1,17 +1,24 @@
-using System;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using Crossover.Web.Security;
-using Crossover.Web.MvcSample.Controllers;
-
-namespace Crossover.Web.MvcSample.App_Start
+//-----------------------------------------------------------------------
+// <copyright file="UnityConfig.cs" company="Crossover">
+// This class has the responsibility of configuring the unity mapping.
+// </copyright>
+// <author>Deepak Agnihotri</author>
+//-----------------------------------------------------------------------
+namespace Crossover.Web.MvcSample
 {
+    using System;
+    using Microsoft.Practices.Unity;
+    using Controllers;
+    using Security;
+
     /// <summary>
     /// Specifies the Unity configuration for the main container.
     /// </summary>
     public class UnityConfig
     {
-        #region Unity Container
+        /// <summary>
+        /// Initializes the lazy container for Unity Mapping
+        /// </summary>
         private static Lazy<IUnityContainer> container = new Lazy<IUnityContainer>(() =>
         {
             var container = new UnityContainer();
@@ -26,7 +33,6 @@ namespace Crossover.Web.MvcSample.App_Start
         {
             return container.Value;
         }
-        #endregion
 
         /// <summary>Registers the type mappings with the Unity container.</summary>
         /// <param name="container">The unity container to configure.</param>
