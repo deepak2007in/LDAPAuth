@@ -8,6 +8,7 @@ namespace Crossover.Web.Security
 {
     using System;
     using System.Collections;
+    using System.Security.Claims;
     using System.Security.Principal;
 
     /// <summary>
@@ -18,22 +19,13 @@ namespace Crossover.Web.Security
     [Serializable]
 	public class CustomIdentity : IIdentity
 	{
-		/// <summary>
-		/// The default constructor initializes any fields to their default values.
-		/// </summary>
-		public CustomIdentity()
-		{
-			this.UserEmail = String.Empty;
-			this.UserRoles = String.Empty;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the CustomIdentity class 
-		/// with the passed parameters
-		/// </summary>
-		/// <param name="email">Email of the User</param>
+        /// <summary>
+        /// Initializes a new instance of the CustomIdentity class 
+        /// with the passed parameters
+        /// </summary>
+        /// <param name="email">Email of the User</param>
         /// <param name="roles">Roles associated with the user.</param>
-		public CustomIdentity(string email, string roles, bool isAuthenticated)
+        public CustomIdentity(string email, string roles, bool isAuthenticated)
 		{
 			this.UserEmail = email;
 			this.UserRoles = roles;
@@ -52,7 +44,7 @@ namespace Crossover.Web.Security
 		/// <summary>
 		/// Indicates whether the User is authenticated
 		/// </summary>
-		public bool IsAuthenticated { get; set; }
+		public bool IsAuthenticated { get; }
 
 		/// <summary>
 		/// Gets or sets the UserID of the User
@@ -62,10 +54,6 @@ namespace Crossover.Web.Security
             get
             {
                 return this.UserEmail;
-            }
-            set
-            {
-                this.UserEmail = value;
             }
         }
         

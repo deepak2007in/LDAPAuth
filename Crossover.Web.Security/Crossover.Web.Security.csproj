@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomAuthentication.cs" />
     <Compile Include="CustomAuthenticationModule.cs" />
     <Compile Include="CustomEncryption.cs" />
     <Compile Include="CustomIdentity.cs" />
