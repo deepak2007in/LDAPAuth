@@ -7,9 +7,9 @@
 namespace Crossover.Web.Security
 {
     using System;
-    using System.Collections;
     using System.Configuration;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Web;
     using System.Web.Security;
 
@@ -50,7 +50,8 @@ namespace Crossover.Web.Security
 		public void Init(HttpApplication httpapp)
 		{
 			this.app = httpapp;
-            app.AuthenticateRequest += new EventHandler(this.OnAuthenticate);
+            var wrapper = new EventHandlerTaskAsyncHelper(OnAuthenticate);
+            app.AddOnAuthenticateRequestAsync(wrapper.BeginEventHandler, wrapper.EndEventHandler);
 		}
 
         /// <summary>
@@ -58,11 +59,11 @@ namespace Crossover.Web.Security
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event argument.</param>
-		void OnAuthenticate(object sender, EventArgs e)
+		async Task OnAuthenticate(object sender, EventArgs e)
 		{
 			app = (HttpApplication)sender;
-            HttpRequest req = app.Request;
-			HttpResponse res = app.Response;
+            var req = app.Request;
+			var res = app.Response;
 
 			string loginUrl = ConfigurationManager.AppSettings[LOGINURL_KEY];
 			if(loginUrl == null || loginUrl.Trim() == String.Empty)
@@ -87,9 +88,8 @@ namespace Crossover.Web.Security
                     if (cookie != null)
 					{
                         string email = FormsAuthentication.Decrypt(cookie.Value).Name;
-                        string roles = FormsAuthentication.Decrypt(cookie.Value).UserData;
-                        var userIdentity = new CustomIdentity(email: email, roles: roles, isAuthenticated: true);
-                        if(userIdentity.IsAuthenticated)
+                        var userIdentity = await securityManager.GetUserIdentityAsync(email: email);
+                        if (userIdentity.IsAuthenticated)
                         {
                             var principal = new CustomPrincipal(userIdentity, userIdentity.Roles);
                             app.Context.User = principal;

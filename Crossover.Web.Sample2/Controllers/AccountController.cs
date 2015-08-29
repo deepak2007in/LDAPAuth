@@ -70,23 +70,7 @@ namespace Crossover.Web.Sample2.Controllers
                 var cookieIssueDate = DateTime.Now;
                 if(identity != null && identity.IsAuthenticated)
                 {
-                    var ticket = new FormsAuthenticationTicket(
-                        version: 0,
-                        name: model.Email,
-                        issueDate: cookieIssueDate,
-                        expiration: cookieIssueDate.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
-                        isPersistent: false,
-                        userData: identity.UserRoles);
-
-                    string encryptedContent = FormsAuthentication.Encrypt(ticket: ticket);
-                    var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedContent)
-                    {
-                        Domain = FormsAuthentication.CookieDomain,
-                        Path = FormsAuthentication.FormsCookiePath,
-                        HttpOnly = true
-                    };
-
-                    Response.Cookies.Add(cookie: cookie);
+                    FormsAuthentication.SetAuthCookie(userName: model.Email, createPersistentCookie: false);
                     var principal = new CustomPrincipal(identity: identity, rolesArray: identity.Roles);
                     HttpContext.User = principal;
                     returnUrl = returnUrl ?? "/";
