@@ -6,12 +6,11 @@
 //-----------------------------------------------------------------------
 namespace Crossover.Util.Ldap
 {
-    using System;
     using System.Collections.Generic;
     using System.DirectoryServices.Protocols;
     using System.Linq;
     using System.Net;
-    
+
     /// <summary>
     /// Implementation for interacting with the LDAP directory
     /// </summary>
@@ -39,23 +38,22 @@ namespace Crossover.Util.Ldap
         /// <returns>The Common Name (CN) string.</returns>
         public string GetPassword(string userToken)
         {
-            var ldapConnection = new LdapConnection(connection.LDAPServer);
-            ldapConnection.SessionOptions.SecureSocketLayer = false;
-            ldapConnection.AuthType = AuthType.Basic;
-            ldapConnection.Bind(new NetworkCredential(connection.UserName, connection.Password));
-            var searchRequest = new SearchRequest(connection.DistinguishedName,string.Format("(cn={0})", userToken),SearchScope.OneLevel,"*");
-            var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
-            foreach(SearchResultEntry entry in searchResponse.Entries)
+            using (var ldapConnection = GetConnection())
             {
-                foreach(var attributeName in entry.Attributes.AttributeNames)
+                var searchRequest = new SearchRequest(connection.DistinguishedName, string.Format("(cn={0})", userToken), SearchScope.OneLevel, "*");
+                var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
+                foreach (SearchResultEntry entry in searchResponse.Entries)
                 {
-                    if(string.Compare(attributeName.ToString(), "userPassword", true) == 0)
+                    foreach (var attributeName in entry.Attributes.AttributeNames)
                     {
-                        return entry.Attributes["userPassword"].GetValues(typeof(string)).First() as string;
+                        if (string.Compare(attributeName.ToString(), "userPassword", true) == 0)
+                        {
+                            return entry.Attributes["userPassword"].GetValues(typeof(string)).First() as string;
+                        }
                     }
                 }
+                return null;
             }
-            return null;
         }
 
         /// <summary>
@@ -66,27 +64,39 @@ namespace Crossover.Util.Ldap
         public IList<string> GetGroups(string userToken)
         {
             var groups = new List<string>();
+            using (var ldapConnection = GetConnection())
+            {
+                var searchRequest = new SearchRequest(connection.DistinguishedName, string.Format("(objectClass=GroupOfNames)"), SearchScope.OneLevel, "*");
+                var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
+                foreach (SearchResultEntry entry in searchResponse.Entries)
+                {
+                    foreach (string attributeName in entry.Attributes.AttributeNames)
+                    {
+                        if (string.Compare(attributeName, "member", true) == 0)
+                        {
+                            var members = entry.Attributes["member"].GetValues(typeof(string)).First().ToString();
+                            if (members.Contains(userToken))
+                            {
+                                groups.Add(entry.Attributes["cn"].GetValues(typeof(string)).First().ToString());
+                            }
+                        }
+                    }
+                }
+                return groups;
+            }
+        }
+
+        /// <summary>
+        /// Get the connection instance of the LDAP directory.
+        /// </summary>
+        /// <returns>LDAP Connection.</returns>
+        private LdapConnection GetConnection()
+        {
             var ldapConnection = new LdapConnection(connection.LDAPServer);
             ldapConnection.SessionOptions.SecureSocketLayer = false;
             ldapConnection.AuthType = AuthType.Basic;
             ldapConnection.Bind(new NetworkCredential(connection.UserName, connection.Password));
-            var searchRequest = new SearchRequest(connection.DistinguishedName, string.Format("(objectClass=GroupOfNames)"), SearchScope.OneLevel, "*");
-            var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
-            foreach (SearchResultEntry entry in searchResponse.Entries)
-            {
-                foreach (string attributeName in entry.Attributes.AttributeNames)
-                {
-                    if(string.Compare(attributeName, "member", true) == 0)
-                    {
-                        var members = entry.Attributes["member"].GetValues(typeof(string)).First().ToString();
-                        if(members.Contains(userToken))
-                        {
-                            groups.Add(entry.Attributes["cn"].GetValues(typeof(string)).First().ToString());
-                        }
-                    }
-                }
-            }
-            return groups;
+            return ldapConnection;
         }
     }
 }
