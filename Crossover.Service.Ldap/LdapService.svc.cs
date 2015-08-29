@@ -57,6 +57,7 @@ namespace Crossover.Service.Ldap
                 {
                     var groups = this.ldapQuery.GetGroups(commonName: loginName);
                     var userInfo = new UserInfo { UserGroups = groups };
+                    authenticatedUsers.Add(loginName, userInfo);
                     return userInfo;
                 }
                 else

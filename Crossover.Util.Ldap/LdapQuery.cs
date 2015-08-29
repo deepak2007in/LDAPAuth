@@ -61,16 +61,32 @@ namespace Crossover.Util.Ldap
         /// <summary>
         ///  Finds and returns the user's returned groups. 
         /// </summary>
-        /// <param name="commonName">The Common Name (CN).</param>
+        /// <param name="userToken">The Common Name (CN).</param>
         /// <returns>Collection of user groups associated with user.</returns>
-        public IList<string> GetGroups(string commonName)
+        public IList<string> GetGroups(string userToken)
         {
-            //var path = string.Concat("LDAP://server/CN=", commonName, ",CN=Users,DC=Softwaremaker,DC=net");
-            //var user = new DirectoryEntry(path: path);
-            //var properties = user.Properties as IEnumerable<PropertyValueCollection>;
-            //var userGroups = properties.Where(property => property.PropertyName == "memberOf").Select(property => property.Value.ToString());
-            //return userGroups.ToList();
-            return new List<string>(new[] { "Developers", "Lead" });
+            var groups = new List<string>();
+            var ldapConnection = new LdapConnection(connection.LDAPServer);
+            ldapConnection.SessionOptions.SecureSocketLayer = false;
+            ldapConnection.AuthType = AuthType.Basic;
+            ldapConnection.Bind(new NetworkCredential(connection.UserName, connection.Password));
+            var searchRequest = new SearchRequest(connection.DistinguishedName, string.Format("(objectClass=GroupOfNames)"), SearchScope.OneLevel, "*");
+            var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
+            foreach (SearchResultEntry entry in searchResponse.Entries)
+            {
+                foreach (string attributeName in entry.Attributes.AttributeNames)
+                {
+                    if(string.Compare(attributeName, "member", true) == 0)
+                    {
+                        var members = entry.Attributes["member"].GetValues(typeof(string)).First().ToString();
+                        if(members.Contains(userToken))
+                        {
+                            groups.Add(entry.Attributes["cn"].GetValues(typeof(string)).First().ToString());
+                        }
+                    }
+                }
+            }
+            return groups;
         }
     }
 }
