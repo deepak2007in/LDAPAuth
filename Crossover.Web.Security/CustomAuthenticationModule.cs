@@ -11,6 +11,8 @@ namespace Crossover.Web.Security
     using System.Configuration;
     using System.Threading;
     using System.Web;
+    using System.Web.Security;
+
 
     /// <summary>
     /// Enables ASP.NET applications to use Custom authentication based on forms authentication. 
@@ -18,6 +20,19 @@ namespace Crossover.Web.Security
     /// </summary>
     public sealed class CustomAuthenticationModule : IHttpModule
 	{
+        /// <summary>
+        /// Holds a static reference of utility to interact with the WCF service.
+        /// </summary>
+        public static readonly ISecurityManager securityManager;
+
+        /// <summary>
+        /// Initializes a static member of HTTP module.
+        /// </summary>
+        static CustomAuthenticationModule()
+        {
+            securityManager = new SecurityManager();
+        }
+
         /// <summary>
         /// Holds the reference of the underlining HTTP Application.
         /// </summary>
@@ -28,11 +43,6 @@ namespace Crossover.Web.Security
         /// </summary>
 		const string LOGINURL_KEY = "CustomAuthentication.LoginUrl";
 
-        /// <summary>
-        /// Configuration key for getting the authentication cookie name.
-        /// </summary>
-		const string AUTHENTICATION_COOKIE_KEY = "CustomAuthentication.Cookie.Name";
-
 		/// <summary>
 		/// Initializes the module derived from IHttpModule when called by the HttpRuntime . 
 		/// </summary>
@@ -40,7 +50,7 @@ namespace Crossover.Web.Security
 		public void Init(HttpApplication httpapp)
 		{
 			this.app = httpapp;
-			app.AuthenticateRequest += new EventHandler(this.OnAuthenticate);
+            app.AuthenticateRequest += new EventHandler(this.OnAuthenticate);
 		}
 
         /// <summary>
@@ -51,7 +61,7 @@ namespace Crossover.Web.Security
 		void OnAuthenticate(object sender, EventArgs e)
 		{
 			app = (HttpApplication)sender;
-			HttpRequest req = app.Request;
+            HttpRequest req = app.Request;
 			HttpResponse res = app.Response;
 
 			string loginUrl = ConfigurationManager.AppSettings[LOGINURL_KEY];
@@ -60,37 +70,39 @@ namespace Crossover.Web.Security
 				throw new Exception(" CustomAuthentication.LoginUrl entry not found in appSettings section of Web.config");
 			}
 
-			string cookieName = ConfigurationManager.AppSettings[AUTHENTICATION_COOKIE_KEY];
-			if(cookieName == null || cookieName.Trim() == String.Empty)
-			{
-				throw new Exception(" CustomAuthentication.Cookie.Name entry not found in appSettings section section of Web.config");
-			}
+			string cookieName = FormsAuthentication.FormsCookieName;
 
-			int i = req.Path.LastIndexOf("/");
-			string page = req.Path.Substring(i+1, (req.Path.Length - (i + 1)));
+			int requestedPageIndex = req.Path.LastIndexOf("/");
+			string page = req.Path.Substring(requestedPageIndex+1, (req.Path.Length - (requestedPageIndex + 1)));
 
-			int j = loginUrl.LastIndexOf("/");
-			string loginPage = loginUrl.Substring(j+1, (loginUrl.Length - (j + 1)));
+			int loginPageIndex = loginUrl.LastIndexOf("/");
+			string loginPage = loginUrl.Substring(loginPageIndex+1, (loginUrl.Length - (loginPageIndex + 1)));
 
+            var isAuthenticated = false;
 			if(page != null && !(page.Trim().ToUpper().Equals(loginPage.ToUpper())))
 			{
 				if(req.Cookies.Count > 0 && req.Cookies[cookieName.ToUpper()] != null)
 				{
 					HttpCookie cookie = req.Cookies[cookieName.ToUpper()];
-					if(cookie != null)
+                    if (cookie != null)
 					{
-						string str = cookie.Value;
-						var userIdentity = CustomAuthentication.Decrypt(str);
-						var principal = new CustomPrincipal(userIdentity, userIdentity.Roles);
-						app.Context.User = principal;
-						Thread.CurrentPrincipal = principal;
+                        string email = FormsAuthentication.Decrypt(cookie.Value).Name;
+                        string roles = FormsAuthentication.Decrypt(cookie.Value).UserData;
+                        var userIdentity = new CustomIdentity(email: email, roles: roles, isAuthenticated: true);
+                        if(userIdentity.IsAuthenticated)
+                        {
+                            var principal = new CustomPrincipal(userIdentity, userIdentity.Roles);
+                            app.Context.User = principal;
+                            Thread.CurrentPrincipal = principal;
+                            isAuthenticated = true;
+                        }
 					}
 				}
-				else
-				{
-					res.Redirect(req.ApplicationPath + loginUrl + "?ReturnUrl=" + req.Path, true);
-				}
-			}
+                if (!isAuthenticated)
+                {
+                    res.Redirect(req.ApplicationPath + loginUrl + "?ReturnUrl=" + req.Path, true);
+                }
+            }
 		}
 
         /// <summary>

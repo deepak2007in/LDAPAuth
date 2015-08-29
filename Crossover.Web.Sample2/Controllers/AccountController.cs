@@ -6,11 +6,15 @@
 //-----------------------------------------------------------------------
 namespace Crossover.Web.Sample2.Controllers
 {
+    using System.Threading.Tasks;
     using System.Web.Mvc;
-    using System.Web.Security;
     using Models;
     using Security;
-    using System.Threading.Tasks;
+    using System.Web.Security;
+    using System;
+    using System.Web;
+
+
 
 
     /// <summary>
@@ -25,11 +29,11 @@ namespace Crossover.Web.Sample2.Controllers
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class with the required dependency.
+        /// <param name="securityManager">The service utility for performing the authentication with the LDAP WCF service.</param>
         /// </summary>
-        public AccountController()
+        public AccountController(ISecurityManager securityManager)
         {
-            // TODO: Implement DI
-            this.securityManager = new SecurityManager();
+            this.securityManager = securityManager;
         }
 
         /// <summary>
@@ -63,12 +67,29 @@ namespace Crossover.Web.Sample2.Controllers
             if(await securityManager.ValidateLoginAsync(email: model.Email, password: model.Password))
             {
                 var identity = await securityManager.GetUserIdentityAsync(email: model.Email);
+                var cookieIssueDate = DateTime.Now;
                 if(identity != null && identity.IsAuthenticated)
                 {
+                    var ticket = new FormsAuthenticationTicket(
+                        version: 0,
+                        name: model.Email,
+                        issueDate: cookieIssueDate,
+                        expiration: cookieIssueDate.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
+                        isPersistent: false,
+                        userData: identity.UserRoles);
+
+                    string encryptedContent = FormsAuthentication.Encrypt(ticket: ticket);
+                    var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedContent)
+                    {
+                        Domain = FormsAuthentication.CookieDomain,
+                        Path = FormsAuthentication.FormsCookiePath,
+                        HttpOnly = true
+                    };
+
+                    Response.Cookies.Add(cookie: cookie);
                     var principal = new CustomPrincipal(identity: identity, rolesArray: identity.Roles);
                     HttpContext.User = principal;
-                    var cookie = FormsAuthentication.GetAuthCookie(userName: model.Email, createPersistentCookie: false);
-                    Request.Cookies.Add(cookie: cookie);
+                    returnUrl = returnUrl ?? "/";
                     return Redirect(returnUrl);
                 }
             }

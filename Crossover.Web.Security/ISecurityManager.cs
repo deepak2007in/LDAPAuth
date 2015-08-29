@@ -14,7 +14,7 @@ namespace Crossover.Web.Security
     public interface ISecurityManager
     {
         /// <summary>
-        /// Gets the user identity associated with the logged in user.
+        /// Asynchronously gets the user identity associated with the logged in user.
         /// </summary>
         /// <param name="email">The unique identifier of the user.</param>
         /// <returns>The user identity.</returns>

@@ -13,6 +13,7 @@ namespace Crossover.Web.Sample2.Controllers
     /// </summary>
     public class HomeController : Controller
     {
+        [Authorize]
         /// <summary>
         /// Renders the home page of the user.
         /// </summary>

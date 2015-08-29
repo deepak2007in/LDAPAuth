@@ -31,7 +31,7 @@ namespace Crossover.Web.Security
             // TODO: Implement DI
             ldapServiceClient = new LdapServiceClient();
         }
-
+        
         /// <summary>
         /// Gets the user identity associated with the logged in user.
         /// </summary>
