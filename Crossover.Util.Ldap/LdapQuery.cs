@@ -7,12 +7,11 @@
 namespace Crossover.Util.Ldap
 {
     using System;
-    using System.Linq;
-    using System.DirectoryServices.Protocols;
     using System.Collections.Generic;
-    using System.Collections;
-
-
+    using System.DirectoryServices.Protocols;
+    using System.Linq;
+    using System.Net;
+    
     /// <summary>
     /// Implementation for interacting with the LDAP directory
     /// </summary>
@@ -28,7 +27,8 @@ namespace Crossover.Util.Ldap
         {
             var ldapConnection = new LdapConnection("127.0.0.1:389");
             ldapConnection.SessionOptions.SecureSocketLayer = false;
-            ldapConnection.AuthType = AuthType.Anonymous;
+            ldapConnection.AuthType = AuthType.Basic;
+            ldapConnection.Bind(new NetworkCredential("cn=manager,dc=maxcrc,dc=com", "secret"));
             var searchRequest = new SearchRequest("cn=manager,dc=maxcrc,dc=com","(givenName=manager)",SearchScope.Base,"*");
             var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
             foreach(SearchResultEntry entry in searchResponse.Entries)

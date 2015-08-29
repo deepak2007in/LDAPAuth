@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Service.Ldap", "..\Crossover.Service.Ldap\Crossover.Service.Ldap.csproj", "{E4B54AB3-1BE4-47B9-8309-842F0DC92547}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Service.Ldap", "Crossover.Service.Ldap\Crossover.Service.Ldap.csproj", "{E4B54AB3-1BE4-47B9-8309-842F0DC92547}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Util.Ldap", "..\Crossover.Util.Ldap\Crossover.Util.Ldap.csproj", "{EB03365F-295D-4A8C-806E-953243E64601}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossover.Util.Ldap", "Crossover.Util.Ldap\Crossover.Util.Ldap.csproj", "{EB03365F-295D-4A8C-806E-953243E64601}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
