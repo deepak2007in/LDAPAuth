@@ -17,10 +17,6 @@ namespace Crossover.Web.Security
 	public class CustomPrincipal: IPrincipal
 	{
 		/// <summary>
-        /// Holds the identity of the user.
-        /// </summary>
-		private readonly IIdentity identity;
-        /// <summary>
         /// Holds the collection of roles associated with user.
         /// </summary>
 		private readonly ArrayList roles;
@@ -34,7 +30,7 @@ namespace Crossover.Web.Security
 		/// <param name="rolesArray">Collection of roles associated with the user.</param>
 		public CustomPrincipal(IIdentity identity, ArrayList rolesArray)
 		{
-			this.identity = identity;
+			this.Identity = identity;
 			roles = rolesArray;
 		}
 		
