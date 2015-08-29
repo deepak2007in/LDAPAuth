@@ -38,14 +38,5 @@ namespace Crossover.Service.Ldap
         /// <returns>The collection of user groups.</returns>
         [OperationContract]
         bool IsAuthenticated(string email);
-
-        /// <summary>
-        /// Registers the user into the LDAP with his username and password.
-        /// </summary>
-        /// <param name="email">Login name for the user.</param>
-        /// <param name="passwordHash">Hash value for user password.</param>
-        /// <returns>The collection of user groups.</returns>
-        [OperationContract]
-        UserInfo Register(string email, string passwordHash);
     }   
 }

@@ -19,7 +19,7 @@ namespace Crossover.Util.Ldap
         /// <remarks>The CN is an unique identity and cannot be changed or edited in LDAP.</remarks>
         /// <param name="userToken">The lookup key.</param>
         /// <returns>The Common Name (CN) string.</returns>
-        string GetPasswordHash(string userToken);
+        string GetPassword(string userToken);
 
         /// <summary>
         ///  Finds and returns the user's returned groups. 
@@ -34,6 +34,5 @@ namespace Crossover.Util.Ldap
         /// <param name="userToken">The lookup key.</param>
         /// <param name="passwordHash">The password hash.</param>
         /// <returns>Flag indicating the success of the result.</returns>
-        bool RegisterUser(string userToken, string passwordHash);
     }
 }

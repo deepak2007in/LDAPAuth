@@ -46,14 +46,14 @@ namespace Crossover.Service.Ldap
         /// Validate the password hash for user and authenticate him.
         /// </summary>
         /// <param name="email">Login name for the user.</param>
-        /// <param name="passwordHash">Hash value for user password.</param>
+        /// <param name="password">Hash value for user password.</param>
         /// <returns>The collection of user groups.</returns>
-        public UserInfo Authenticate(string loginName, string passwordHash)
+        public UserInfo Authenticate(string loginName, string password)
         {
             if(!this.IsAuthenticated(loginName: loginName))
             {
-                var passwordHashInLdap = this.ldapQuery.GetPasswordHash(userToken: loginName);
-                if (passwordHash == passwordHashInLdap)
+                var passwordInLdap = this.ldapQuery.GetPassword(userToken: loginName);
+                if (password == passwordInLdap)
                 {
                     var groups = this.ldapQuery.GetGroups(commonName: loginName);
                     var userInfo = new UserInfo { UserGroups = groups };
@@ -92,18 +92,6 @@ namespace Crossover.Service.Ldap
         public bool IsAuthenticated(string loginName)
         {
             return authenticatedUsers.ContainsKey(loginName);
-        }
-
-        /// <summary>
-        /// Registers the user into the LDAP with his username and password.
-        /// </summary>
-        /// <param name="email">Login name for the user.</param>
-        /// <param name="passwordHash">Hash value for user password.</param>
-        /// <returns>The collection of user groups.</returns>
-        public UserInfo Register(string loginName, string passwordHash)
-        {
-            var registered = this.ldapQuery.RegisterUser(userToken: loginName, passwordHash: passwordHash);
-            return new UserInfo { UserGroups = new List<string>(new[] { "Guests" }) };
         }
     }
 }

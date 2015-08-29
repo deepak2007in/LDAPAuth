@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.Protocols" />
@@ -42,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LdapConnectionProvider.cs" />
+    <Compile Include="ILdapConnectionProvider.cs" />
     <Compile Include="ILdapQuery.cs" />
     <Compile Include="LdapQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

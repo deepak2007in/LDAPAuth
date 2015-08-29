@@ -18,18 +18,32 @@ namespace Crossover.Util.Ldap
     public class LdapQuery : ILdapQuery
     {
         /// <summary>
+        /// Holds the service utility for providing the connection information of LDAP directory.
+        /// </summary>
+        private readonly ILdapConnectionProvider connection;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LdapQuery"/> class with the required dependency.
+        /// </summary>
+        /// <param name="connection">Service utility for providing the connection information of LDAP directory.</param>
+        public LdapQuery(ILdapConnectionProvider connection)
+        {
+            this.connection = connection;
+        }
+
+        /// <summary>
         /// Gets the Common Name (CN) of the Login information of the LDAP Directory.
         /// </summary>
         /// <remarks>The CN is an unique identity and cannot be changed or edited in LDAP.</remarks>
         /// <param name="userToken">The lookup key.</param>
         /// <returns>The Common Name (CN) string.</returns>
-        public string GetPasswordHash(string userToken)
+        public string GetPassword(string userToken)
         {
-            var ldapConnection = new LdapConnection("127.0.0.1:389");
+            var ldapConnection = new LdapConnection(connection.LDAPServer);
             ldapConnection.SessionOptions.SecureSocketLayer = false;
             ldapConnection.AuthType = AuthType.Basic;
-            ldapConnection.Bind(new NetworkCredential("cn=manager,dc=maxcrc,dc=com", "secret"));
-            var searchRequest = new SearchRequest("cn=manager,dc=maxcrc,dc=com","(givenName=manager)",SearchScope.Base,"*");
+            ldapConnection.Bind(new NetworkCredential(connection.UserName, connection.Password));
+            var searchRequest = new SearchRequest(connection.DistinguishedName,string.Format("(cn={0})", userToken),SearchScope.OneLevel,"*");
             var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
             foreach(SearchResultEntry entry in searchResponse.Entries)
             {
@@ -57,17 +71,6 @@ namespace Crossover.Util.Ldap
             //var userGroups = properties.Where(property => property.PropertyName == "memberOf").Select(property => property.Value.ToString());
             //return userGroups.ToList();
             return new List<string>(new[] { "Developers", "Lead" });
-        }
-
-        /// <summary>
-        /// Registers the new user into the LDAP directory.
-        /// </summary>
-        /// <param name="userToken">The lookup key.</param>
-        /// <param name="passwordHash">The password hash.</param>
-        /// <returns>Flag indicating the success of the result.</returns>
-        public bool RegisterUser(string userToken, string passwordHash)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -19,7 +19,8 @@ namespace Crossover.Service.Ldap
         /// </summary>
         public override void Load()
         {
-            Bind<ILdapQuery>().To<LdapQuery>();
+            Bind<ILdapQuery>().To<LdapQuery>().InSingletonScope();
+            Bind<ILdapConnectionProvider>().To<LdapConnectionProvider>().InSingletonScope();
         }
     }
 }
