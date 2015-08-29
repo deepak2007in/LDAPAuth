@@ -27,6 +27,7 @@ namespace Crossover.Web.Sample2.Controllers
         /// Renders the about page of the company.
         /// </summary>
         /// <returns>The about page view.</returns>
+        [Authorize(Roles = "Architect")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
