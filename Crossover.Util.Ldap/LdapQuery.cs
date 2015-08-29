@@ -8,8 +8,10 @@ namespace Crossover.Util.Ldap
 {
     using System;
     using System.Linq;
-    using System.DirectoryServices;
+    using System.DirectoryServices.Protocols;
     using System.Collections.Generic;
+    using System.Collections;
+
 
     /// <summary>
     /// Implementation for interacting with the LDAP directory
@@ -24,13 +26,22 @@ namespace Crossover.Util.Ldap
         /// <returns>The Common Name (CN) string.</returns>
         public string GetPasswordHash(string userToken)
         {
-            var path = "LDAP://DC=Softwaremaker,DC=net";
-            var directoryEntry = new DirectoryEntry(path: path);
-            var rootSearch = new DirectorySearcher(directoryEntry);
-            rootSearch.Filter = "(&(objectCategory=user)(userPrincipalName=" + userToken +"))";
-            var searchResults = rootSearch.FindAll() as IEnumerable<SearchResult>;
-            var commonName = searchResults.Select(searchResult => searchResult.Properties["cn"]).FirstOrDefault();
-            return commonName.ToString();
+            var ldapConnection = new LdapConnection("127.0.0.1:389");
+            ldapConnection.SessionOptions.SecureSocketLayer = false;
+            ldapConnection.AuthType = AuthType.Anonymous;
+            var searchRequest = new SearchRequest("cn=manager,dc=maxcrc,dc=com","(givenName=manager)",SearchScope.Base,"*");
+            var searchResponse = ldapConnection.SendRequest(request: searchRequest) as SearchResponse;
+            foreach(SearchResultEntry entry in searchResponse.Entries)
+            {
+                foreach(var attributeName in entry.Attributes.AttributeNames)
+                {
+                    if(string.Compare(attributeName.ToString(), "userPassword", true) == 0)
+                    {
+                        return entry.Attributes["userPassword"].GetValues(typeof(string)).First() as string;
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -40,11 +51,12 @@ namespace Crossover.Util.Ldap
         /// <returns>Collection of user groups associated with user.</returns>
         public IList<string> GetGroups(string commonName)
         {
-            var path = string.Concat("LDAP://server/CN=", commonName, ",CN=Users,DC=Softwaremaker,DC=net");
-            var user = new DirectoryEntry(path: path);
-            var properties = user.Properties as IEnumerable<PropertyValueCollection>;
-            var userGroups = properties.Where(property => property.PropertyName == "memberOf").Select(property => property.Value.ToString());
-            return userGroups.ToList();
+            //var path = string.Concat("LDAP://server/CN=", commonName, ",CN=Users,DC=Softwaremaker,DC=net");
+            //var user = new DirectoryEntry(path: path);
+            //var properties = user.Properties as IEnumerable<PropertyValueCollection>;
+            //var userGroups = properties.Where(property => property.PropertyName == "memberOf").Select(property => property.Value.ToString());
+            //return userGroups.ToList();
+            return new List<string>(new[] { "Developers", "Lead" });
         }
 
         /// <summary>
